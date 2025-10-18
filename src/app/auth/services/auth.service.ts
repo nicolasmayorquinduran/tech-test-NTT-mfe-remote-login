@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LoginDto, LoginResponseDto, UserService, HttpService } from 'shared';
+import { LoginDto, LoginResponseDto, UserService, HttpService, AUTH_CONFIG } from 'shared';
 
 @Injectable({
   providedIn: 'root'
@@ -8,14 +8,14 @@ import { LoginDto, LoginResponseDto, UserService, HttpService } from 'shared';
 export class AuthService {
   private readonly httpService = inject(HttpService);
   private readonly userService = inject(UserService);
-  private readonly apiUrl = 'http://localhost:3001';
+  private readonly authConfig = inject(AUTH_CONFIG);
 
   /**
    * Realiza el login y persiste los datos del usuario
    */
   login(credentials: LoginDto): Observable<LoginResponseDto> {
     return this.httpService.post<LoginResponseDto>(
-      `${this.apiUrl}/login`, 
+      this.authConfig.loginEndpoint || '/login', 
       credentials, 
       { withCredentials: true }
     )
