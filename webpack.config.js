@@ -1,11 +1,11 @@
 const { shareAll, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
 
-module.exports = withModuleFederationPlugin({
+const config =  withModuleFederationPlugin({
 
-  name: 'login',
+  name: 'mf-login',
 
   exposes: {
-    './Component': './src/app/app.ts',
+    './AuthModule': './src/app/auth/auth.module.ts',
   },
 
   shared: {
@@ -13,3 +13,9 @@ module.exports = withModuleFederationPlugin({
   },
 
 });
+
+config.output.publicPath = 'http://localhost:4201/';
+
+module.exports = config
+
+

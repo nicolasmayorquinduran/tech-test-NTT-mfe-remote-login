@@ -26,8 +26,11 @@ export class LoginFormComponent {
   }
 
   onSubmit(): void {
-    if (this.loginForm.valid) {
-      this.isLoading = true;
+    if(!this.loginForm.valid){
+      this.errorMessage = 'Formulario invalido';
+      return;
+    }
+     this.isLoading = true;
       this.errorMessage = '';
       
       this.authService.login(this.loginForm.value).subscribe({
@@ -42,6 +45,5 @@ export class LoginFormComponent {
           console.error('Error en login:', error);
         }
       });
-    }
   }
 }
