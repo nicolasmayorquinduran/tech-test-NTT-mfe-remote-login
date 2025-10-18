@@ -2,8 +2,8 @@
   <div class="login-card">
     <h2>Iniciar Sesión</h2>
     
-    <div class="server-error" *ngIf="errorMessage">
-      <small>{{ errorMessage }}</small>
+    <div class="server-error" *ngIf="errorMessage()">
+      <small>{{ errorMessage() }}</small>
     </div>
     
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -39,9 +39,9 @@
       <button 
         type="submit" 
         class="btn-submit" 
-        [disabled]="!loginForm.valid || isLoading"
+        [disabled]="!loginForm.valid || isLoading()"
       >
-        {{ isLoading ? 'Iniciando sesión...' : 'Ingresar' }}
+        {{ isLoading() ? 'Iniciando sesión...' : 'Ingresar' }}
       </button>
     </form>
   </div>

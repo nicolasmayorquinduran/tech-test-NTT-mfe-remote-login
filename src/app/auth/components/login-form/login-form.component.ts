@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { finalize } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -15,8 +16,8 @@ export class LoginFormComponent {
   private readonly fb = inject(FormBuilder);
   
   loginForm: FormGroup;
-  errorMessage: string = '';
-  isLoading: boolean = false;
+  errorMessage = signal<string>('');
+  isLoading = signal<boolean>(false);
 
   constructor() {
     this.loginForm = this.fb.group({
@@ -27,21 +28,26 @@ export class LoginFormComponent {
 
   onSubmit(): void {
     if(!this.loginForm.valid){
-      this.errorMessage = 'Formulario invalido';
+      this.errorMessage.set('Formulario invalido');
       return;
     }
-     this.isLoading = true;
-      this.errorMessage = '';
-      
-      this.authService.login(this.loginForm.value).subscribe({
+    
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+    
+    this.authService.login(this.loginForm.value)
+      .pipe(
+        finalize(() => {
+          this.isLoading.set(false);
+        })
+      )
+      .subscribe({
         next: (response) => {
-          this.isLoading = false;
           this.formSubmit.emit(response);
           console.log('Login exitoso:', response);
         },
         error: (error) => {
-          this.isLoading = false;
-          this.errorMessage = error.message || 'Error al iniciar sesión';
+          this.errorMessage.set(error.message || 'Error al iniciar sesión');
           console.error('Error en login:', error);
         }
       });

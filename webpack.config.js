@@ -9,7 +9,17 @@ const config =  withModuleFederationPlugin({
   },
 
   shared: {
-    ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+    ...shareAll({ 
+      singleton: true, 
+      strictVersion: true, 
+      requiredVersion: 'auto' 
+    }),
+    // Excluir 'shared' porque es una librería local (file:)
+    'shared': { 
+      singleton: false,
+      strictVersion: false,
+      requiredVersion: false
+    }
   },
 
 });
