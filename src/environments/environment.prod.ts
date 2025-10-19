@@ -1,31 +1,24 @@
-import { ApiConfig, AuthConfig, AppConfig } from 'shared';
+import { 
+  DEFAULT_PROD_API_CONFIG, 
+  DEFAULT_AUTH_CONFIG, 
+  createAppConfig 
+} from 'shared';
 
 export const environment = {
   production: true
 };
 
 /**
- * Configuración de la API para producción
+ * Configuración de la API - usa valores compartidos por defecto
  */
-export const apiConfig: ApiConfig = {
-  baseUrl: 'https://api.production.com',
-  timeout: 30000
-};
+export const apiConfig = DEFAULT_PROD_API_CONFIG;
 
 /**
- * Configuración de autenticación
+ * Configuración de autenticación - usa valores compartidos por defecto
  */
-export const authConfig: AuthConfig = {
-  loginEndpoint: '/login',
-  logoutEndpoint: '/logout',
-  tokenKey: 'auth_token'
-};
+export const authConfig = DEFAULT_AUTH_CONFIG;
 
 /**
  * Configuración general de la aplicación
  */
-export const appConfig: AppConfig = {
-  production: true,
-  appName: 'Login App',
-  version: '1.0.0'
-};
+export const appConfig = createAppConfig('Login App', true);

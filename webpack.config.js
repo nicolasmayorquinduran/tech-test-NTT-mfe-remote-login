@@ -1,11 +1,15 @@
 const { shareAll, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
+const { getMfeEnv } = require('../libs/projects/shared/src/lib/core/config/mfe-env.config.js');
 
-const config =  withModuleFederationPlugin({
+const isProduction = process.env.NODE_ENV === 'production';
+const mfeEnv = getMfeEnv(isProduction);
 
-  name: 'mf-login',
+const config = withModuleFederationPlugin({
+
+  name: 'mfLogin',
 
   exposes: {
-    './AuthModule': './src/app/auth/auth.module.ts',
+    './AuthModule': './src/app/auth/auth.module.ts'
   },
 
   shared: {
@@ -14,7 +18,6 @@ const config =  withModuleFederationPlugin({
       strictVersion: true, 
       requiredVersion: 'auto' 
     }),
-    // Excluir 'shared' porque es una librería local (file:)
     'shared': { 
       singleton: false,
       strictVersion: false,
@@ -24,7 +27,7 @@ const config =  withModuleFederationPlugin({
 
 });
 
-config.output.publicPath = 'http://localhost:4201/';
+config.output.publicPath = `${mfeEnv.login.url}/`;
 
 module.exports = config
 

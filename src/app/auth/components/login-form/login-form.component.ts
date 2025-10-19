@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
+import { EventBusService, EventTypes } from 'shared';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -10,10 +11,10 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './login-form.component.scss'
 })
 export class LoginFormComponent {
-  @Output() formSubmit = new EventEmitter();
 
   private readonly authService = inject(AuthService);
   private readonly fb = inject(FormBuilder);
+  private readonly eventBus = inject(EventBusService);
   
   loginForm: FormGroup;
   errorMessage = signal<string>('');
@@ -43,12 +44,10 @@ export class LoginFormComponent {
       )
       .subscribe({
         next: (response) => {
-          this.formSubmit.emit(response);
-          console.log('Login exitoso:', response);
+          this.eventBus.emit(EventTypes.USER_LOGGED_IN, response.user);
         },
         error: (error) => {
           this.errorMessage.set(error.message || 'Error al iniciar sesión');
-          console.error('Error en login:', error);
         }
       });
   }
