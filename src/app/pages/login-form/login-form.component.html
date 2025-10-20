@@ -1,0 +1,99 @@
+@if (!globalState.isAuthenticated()) {
+  <div class="login-container">
+    <div class="login-card">
+      <h2>Iniciar Sesión</h2>
+
+      @if (errorMessage()) {
+        <div class="server-error">
+          <small>{{ errorMessage() }}</small>
+        </div>
+      }
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group autocomplete-container">
+          <label for="username">Organización miembro</label>
+          <div class="input-wrapper">
+            <input 
+              id="username" 
+              type="text" 
+              formControlName="username" 
+              placeholder="Empieza a escribir para autocompletar..."
+              class="form-control"
+              (input)="onUsernameInput($event)"
+              (focus)="onInputFocus()"
+              (blur)="onInputBlur()"
+              autocomplete="off"
+            />
+
+            @if (showOptions()) {
+              <div class="autocomplete-options">
+                @for (member of memberOptions(); track member.id) {
+                  <div 
+                    class="option-item"
+                    (mousedown)="selectMember(member)"
+                  >
+                    <div class="option-main">
+                      <span class="member-name">{{ member.displayName }}</span>
+                      <span class="member-id">#{{ member.id }}</span>
+                    </div>
+                    @if (member.location) {
+                      <small class="member-location">{{ member.location }}</small>
+                    }
+                  </div>
+                }
+                @if (memberOptions().length === 0) {
+                  <div class="option-item no-results">
+                    <small>No se encontraron members</small>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          @if (selectedMember()) {
+            <div class="info-message">
+              <small>✓ Seleccionado: {{ selectedMember()!.primaryName }} (ID: {{ selectedMember()!.id }})</small>
+            </div>
+          }
+
+          @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
+            <div class="error-message">
+              @if (loginForm.get('username')?.hasError('required')) {
+                <small>El member es requerido</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="password">Contraseña (hardcodeada 😳)</label>
+          <input 
+            id="password" 
+            value="1234"
+            placeholder="Ingresa tu contraseña"
+            class="form-control"
+            formControlName="password" 
+          />
+          @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+            <div class="error-message">
+              @if (loginForm.get('password')?.hasError('required')) {
+                <small>La contraseña es requerida</small>
+              }
+              @if (loginForm.get('password')?.hasError('minlength')) {
+                <small>La contraseña debe tener al menos 4 caracteres</small>
+              }
+            </div>
+          }
+        </div>
+
+        <button 
+          type="submit" 
+          class="btn-submit" 
+          [disabled]="!loginForm.valid || isLoading()"
+        >
+          {{ isLoading() ? 'Iniciando sesión...' : 'Ingresar' }}
+        </button>
+      </form>
+    </div>
+  </div>
+}

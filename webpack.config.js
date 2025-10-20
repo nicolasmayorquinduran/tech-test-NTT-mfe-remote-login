@@ -9,7 +9,7 @@ const config = withModuleFederationPlugin({
   name: 'mfLogin',
 
   exposes: {
-    './AuthModule': './src/app/auth/auth.module.ts'
+    './AppModule': './src/app/app-module.ts'
   },
 
   shared: {

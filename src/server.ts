@@ -1,3 +1,7 @@
+/**
+ * Server simplificado para MFE Login
+ * Este MFE expone un módulo con componentes standalone, no requiere SSR completo
+ */
 import {
   AngularNodeAppEngine,
   createNodeRequestHandler,
