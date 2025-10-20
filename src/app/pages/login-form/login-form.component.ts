@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   templateUrl: './login-form.component.html',
   imports: [CommonModule, ReactiveFormsModule],
-  styleUrl: './login-form.component.scss'
+  styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent implements OnInit, OnDestroy {
 
